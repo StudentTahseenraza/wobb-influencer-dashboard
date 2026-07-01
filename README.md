@@ -39,6 +39,7 @@ View Live Demo: (https://wobb-influencer-dashboard-six.vercel.app/)
 
 ✨ Features
 Core Features
+
 🔍 Advanced Search - Debounced search with case-insensitive matching and highlight support
 
 🎯 Platform Filters - Switch between Instagram, YouTube, and TikTok with active state indicators
@@ -54,6 +55,7 @@ Core Features
 ♿ Accessibility - WCAG AA compliant with keyboard navigation and screen reader support
 
 Bonus Features (All 34 Implemented)
+
 ✨ Framer Motion Animations - Smooth page transitions, hover effects, and micro-interactions
 
 🎨 Glassmorphism Design - Modern, elegant UI with blur effects
