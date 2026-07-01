@@ -2,6 +2,7 @@
 A modern, production-ready influencer search and curation platform built with React, TypeScript, and Zustand. This application allows users to discover, filter, and curate top creators across Instagram, YouTube, and TikTok platforms.
 
 📋 Table of Contents
+
 Live Demo
 
 Features
@@ -33,7 +34,8 @@ Contributing
 License
 
 🌐 Live Demo
-View Live Demo
+
+View Live Demo: (https://wobb-influencer-dashboard-six.vercel.app/)
 
 ✨ Features
 Core Features
