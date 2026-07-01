@@ -1,28 +1,41 @@
 /* src/index.css */
 @import "tailwindcss";
 
-/* Theme variables */
+/* Theme variables - LIGHT MODE (default) */
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  --bg-primary: #f0f2f5;
+  --bg-secondary: #ffffff;
   --bg-card: #ffffff;
-  --text-primary: #0a0a14;
+  --bg-navbar: rgba(255, 255, 255, 0.95);
+  --text-primary: #1a1a2e;
   --text-secondary: #6b7280;
-  --border-color: #e4e4e7;
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  --text-muted: #9ca3af;
+  --border-color: #e5e7eb;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --shadow-hover: rgba(139, 92, 246, 0.15);
+  --card-border: #e5e7eb;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
 }
 
+/* DARK MODE */
 .dark {
   --bg-primary: #0a0a14;
   --bg-secondary: #14141f;
   --bg-card: #1a1a2e;
+  --bg-navbar: rgba(10, 10, 20, 0.95);
   --text-primary: #fafafa;
   --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
   --border-color: #2a2a3e;
   --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-hover: rgba(139, 92, 246, 0.3);
+  --card-border: #2a2a3e;
+  --input-bg: #1a1a2e;
+  --input-border: #2a2a3e;
 }
 
-/* Apply theme */
+/* Apply theme to body */
 body {
   margin: 0;
   min-height: 100vh;
@@ -92,89 +105,130 @@ html {
   animation: shimmer 1.5s infinite;
 }
 
-/* Utility classes */
-.bg-background {
-  background-color: var(--bg-primary);
+/* ====== COMPONENT STYLES ====== */
+
+/* Navbar */
+.navbar {
+  background-color: var(--bg-navbar);
+  border-bottom: 1px solid var(--border-color);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px var(--shadow-color);
 }
 
-.bg-card {
-  background-color: var(--bg-card);
-}
-
-.text-foreground {
-  color: var(--text-primary);
-}
-
-.text-muted {
-  color: var(--text-secondary);
-}
-
-.border-border {
-  border-color: var(--border-color);
-}
-
-.shadow-card {
-  box-shadow: 0 4px 6px var(--shadow-color);
-}
-
-/* Card styles */
+/* Cards */
 .card {
   background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--card-border);
   border-radius: 0.75rem;
-  box-shadow: 0 4px 6px var(--shadow-color);
+  box-shadow: 0 2px 8px var(--shadow-color);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  box-shadow: 0 10px 15px var(--shadow-color);
+  box-shadow: 0 8px 25px var(--shadow-color);
 }
 
-/* Input styles */
-.input {
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-color);
-  color: var(--text-primary);
-}
-
-.dark .input {
-  background-color: #1a1a2e;
-  border-color: #2a2a3e;
-  color: #fafafa;
-}
-
-/* Navbar styles */
-.navbar {
-  background-color: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid var(--border-color);
-  backdrop-filter: blur(12px);
-}
-
-.dark .navbar {
-  background-color: rgba(10, 10, 20, 0.8);
-  border-bottom: 1px solid #2a2a3e;
-}
-
-/* Profile card specific */
+/* Profile Cards */
 .profile-card {
   background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--card-border);
   border-radius: 0.75rem;
   padding: 1rem;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .profile-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--shadow-color);
+  box-shadow: 0 8px 25px var(--shadow-hover);
   border-color: #8b5cf6;
 }
 
-.dark .profile-card:hover {
-  border-color: #8b5cf6;
+/* Search Input */
+.search-input {
+  background-color: var(--input-bg);
+  border: 2px solid var(--input-border);
+  color: var(--text-primary);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s ease;
 }
 
-/* Avatar fallback */
+.search-input:focus {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+/* Filter Chips */
+.filter-chip {
+  background-color: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.filter-chip:hover {
+  border-color: #8b5cf6;
+  color: var(--text-primary);
+}
+
+.filter-chip.active {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: var(--border-color);
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: var(--bg-card);
+  border-left: 1px solid var(--border-color);
+  box-shadow: -4px 0 20px var(--shadow-color);
+}
+
+/* Avatar Fallback */
 .avatar-fallback {
   background: linear-gradient(135deg, #8b5cf6, #6366f1);
   color: white;
@@ -183,4 +237,65 @@ html {
   justify-content: center;
   font-weight: bold;
   text-transform: uppercase;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-verified {
+  background: #3b82f6;
+  color: white;
+}
+
+.badge-platform {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.badge-engagement {
+  background: #10b981;
+  color: white;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-description {
+  color: var(--text-secondary);
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 25%,
+    var(--border-color) 50%,
+    var(--bg-secondary) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
 }

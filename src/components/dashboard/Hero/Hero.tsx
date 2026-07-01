@@ -12,7 +12,7 @@ export const Hero = () => {
       <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-purple-600 via-pink-500 to-indigo-600 bg-clip-text text-transparent">
         Find Your Perfect Influencer
       </h1>
-      <p className="mt-4 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+      <p className="mt-4 text-lg text-[var(--text-secondary)] max-w-2xl mx-auto">
         Discover and curate top creators across Instagram, YouTube, and TikTok
       </p>
     </motion.div>

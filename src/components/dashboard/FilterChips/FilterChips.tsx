@@ -13,7 +13,7 @@ export const FilterChips = ({ platforms }: FilterChipsProps) => {
   const { selectedPlatform, setSelectedPlatform } = useAppStore();
 
   return (
-    <div className="flex flex-wrap gap-2 justify-center">
+    <div className="flex flex-wrap gap-3 justify-center">
       {platforms.map((platform: Platform) => {
         const isSelected = selectedPlatform === platform;
         return (
@@ -23,10 +23,8 @@ export const FilterChips = ({ platforms }: FilterChipsProps) => {
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelectedPlatform(platform)}
             className={clsx(
-              'px-4 py-2 rounded-full font-medium transition-all duration-200 text-sm',
-              isSelected
-                ? 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/30'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
+              'filter-chip',
+              isSelected && 'active'
             )}
             aria-pressed={isSelected}
           >

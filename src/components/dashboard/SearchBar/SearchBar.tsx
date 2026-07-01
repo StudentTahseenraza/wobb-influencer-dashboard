@@ -41,7 +41,7 @@ export const SearchBar = () => {
       className="relative max-w-2xl mx-auto"
     >
       <div className={`relative transition-all duration-300 ${isFocused ? 'scale-[1.02]' : ''}`}>
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none">
           <IoSearch size={20} />
         </div>
         
@@ -53,7 +53,7 @@ export const SearchBar = () => {
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder="Search influencers by name or username... (Press /)"
-          className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
+          className="search-input w-full pl-12 pr-12 py-3"
           aria-label="Search influencers"
         />
         
@@ -64,7 +64,7 @@ export const SearchBar = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               onClick={() => setLocalQuery('')}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               aria-label="Clear search"
             >
               <IoClose size={20} />
