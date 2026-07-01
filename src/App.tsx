@@ -1,15 +1,15 @@
 // src/App.tsx
 import { lazy, Suspense, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ErrorBoundary } from "@/components/common/ErrorBoundary";
-import { LoadingSpinner } from "@/components/LoadingSpinner";
-import { NotFound } from "@/pages/NotFound";
+import { ErrorBoundary } from "./components/common/ErrorBoundary/ErrorBoundary";
+import { LoadingSpinner } from "./components/common/LoadingSpinner/LoadingSpinner";
+import { useAppStore } from "@/store/appStore";
 
-// Lazy load pages for performance
 const SearchPage = lazy(() => import("@/pages/SearchPage"));
 const ProfileDetailPage = lazy(() => import("@/pages/ProfileDetailPage"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,15 +21,38 @@ const queryClient = new QueryClient({
   },
 });
 
-// ✅ FIX: Scroll restoration
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  
+function AppContent() {
+  const { theme } = useAppStore();
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname]);
-  
-  return null;
+    // Apply theme to document
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    // Save to localStorage
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  return (
+    <Suspense fallback={<LoadingSpinner fullScreen />}>
+      <Routes>
+        <Route path="/" element={<SearchPage />} />
+        <Route path="/profile/:username" element={<ProfileDetailPage />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+      </Routes>
+      <Toaster 
+        position="top-right"
+        richColors
+        toastOptions={{
+          duration: 3000,
+          className: 'font-sans',
+        }}
+      />
+    </Suspense>
+  );
 }
 
 function App() {
@@ -37,24 +60,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ErrorBoundary>
         <BrowserRouter>
-          <ScrollToTop />
-          <Suspense fallback={<LoadingSpinner fullScreen />}>
-            <Routes>
-              <Route path="/" element={<SearchPage />} />
-              <Route path="/profile/:username" element={<ProfileDetailPage />} />
-              {/* ✅ FIX: 404 handling */}
-              <Route path="/404" element={<NotFound />} />
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </Suspense>
-          <Toaster 
-            position="top-right"
-            richColors
-            toastOptions={{
-              duration: 3000,
-              className: 'font-sans',
-            }}
-          />
+          <AppContent />
         </BrowserRouter>
       </ErrorBoundary>
     </QueryClientProvider>
