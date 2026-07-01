@@ -1,4 +1,3 @@
-📚 Wobb Assignment - Complete README
 🎯 Influencer Search Application
 A modern, production-ready influencer search and curation platform built with React, TypeScript, and Zustand. This application allows users to discover, filter, and curate top creators across Instagram, YouTube, and TikTok platforms.
 
