@@ -8,7 +8,7 @@ import { Avatar } from "@/components/common/Avatar/Avatar";
 import { Badge } from "@/components/common/Badge/Badge";
 import { AddToListButton } from "@/components/AddToListButton";
 import { SkeletonProfile } from "@/components/common/Skeleton/SkeletonCard";
-import type { FullUserProfile, ProfileDetailResponse } from "@/types";
+import type { FullUserProfile, ProfileDetailResponse, UserProfileSummary } from "@/types";
 import { loadProfileByUsername } from "@/utils/profileLoader";
 import { extractProfiles } from "@/utils/dataHelpers";
 import { toast } from "sonner";
@@ -32,7 +32,6 @@ export default function ProfileDetailPage() {
   const [isBasicInfo, setIsBasicInfo] = useState(false);
 
   useEffect(() => {
-    // Handle undefined username
     if (!username || username === 'undefined') {
       setError("No username provided");
       setLoading(false);
@@ -45,7 +44,6 @@ export default function ProfileDetailPage() {
     setBasicProfile(null);
     setIsBasicInfo(false);
 
-    // Try to load detailed profile from JSON
     loadProfileByUsername(username)
       .then((data: ProfileDetailResponse | null) => {
         if (isMounted) {
@@ -54,7 +52,6 @@ export default function ProfileDetailPage() {
             setIsBasicInfo(false);
             setLoading(false);
           } else {
-            // Profile not found in JSON files - try search data
             const basic = getProfileFromSearch(username, platform);
             if (basic) {
               setBasicProfile(basic);
@@ -80,23 +77,21 @@ export default function ProfileDetailPage() {
     };
   }, [username, platform]);
 
-  // Helper: Get profile from search data
   const getProfileFromSearch = (username: string, platform: string): FullUserProfile | null => {
     try {
-      // Try all platforms if the specific one doesn't have the profile
       const platforms = [platform, 'instagram', 'youtube', 'tiktok'];
       for (const p of platforms) {
         try {
           const profiles = extractProfiles(p as any);
-          const found = profiles.find(prof => 
+          const found = profiles.find((prof: UserProfileSummary) => 
             prof.username.toLowerCase() === username.toLowerCase()
           );
           if (found) {
             return {
               ...found,
               description: found.fullname || `${found.username} on ${p}`,
-              posts_count: found.posts_count || 0,
-              avg_likes: found.avg_likes || 0,
+              posts_count: 0, // UserProfileSummary doesn't have posts_count
+              avg_likes: 0,   // UserProfileSummary doesn't have avg_likes
               picture: found.picture || '',
             };
           }
@@ -120,7 +115,6 @@ export default function ProfileDetailPage() {
     }
   };
 
-  // Handle invalid username
   if (!username || username === 'undefined') {
     return (
       <>
@@ -149,7 +143,6 @@ export default function ProfileDetailPage() {
     );
   }
 
-  // Show loading state
   if (loading) {
     return (
       <>
@@ -164,7 +157,6 @@ export default function ProfileDetailPage() {
     );
   }
 
-  // Show basic profile info when detailed JSON not found
   if (isBasicInfo && basicProfile) {
     const user = basicProfile;
     const avatarSrc = user.picture || '';
@@ -179,7 +171,6 @@ export default function ProfileDetailPage() {
             </Link>
 
             <div className="card p-6 md:p-8">
-              {/* Warning Banner */}
               <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg flex items-start gap-3">
                 <IoWarning className="text-yellow-500 dark:text-yellow-400 text-xl mt-0.5 flex-shrink-0" />
                 <div>
@@ -276,7 +267,6 @@ export default function ProfileDetailPage() {
     );
   }
 
-  // Show error state (profile not found at all)
   if (error && !basicProfile) {
     return (
       <>
@@ -312,7 +302,6 @@ export default function ProfileDetailPage() {
     );
   }
 
-  // Show full profile with detailed data
   if (profileData) {
     const user: FullUserProfile = profileData.data.user_profile;
     const avatarSrc = user.picture || '';
@@ -420,6 +409,5 @@ export default function ProfileDetailPage() {
     );
   }
 
-  // Fallback - should never reach here
   return null;
 }

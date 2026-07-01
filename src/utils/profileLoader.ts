@@ -48,17 +48,33 @@ export async function loadProfileByUsername(
 
   try {
     const result = await loader();
-    let data = (result as { default?: unknown }).default ?? result;
+    const data = (result as { default?: unknown }).default ?? result;
     
     let userProfile = null;
     
+    // Type-safe check for data structure
     if (data && typeof data === 'object') {
-      if (data.data && data.data.user_profile) {
-        userProfile = data.data.user_profile;
-      } else if (data.user_profile) {
-        userProfile = data.user_profile;
-      } else if (data.data && data.data.success && data.data.user_profile) {
-        userProfile = data.data.user_profile;
+      // Check for { data: { user_profile: {...} } }
+      const dataObj = data as Record<string, unknown>;
+      
+      if (dataObj.data && typeof dataObj.data === 'object') {
+        const innerData = dataObj.data as Record<string, unknown>;
+        if (innerData.user_profile && typeof innerData.user_profile === 'object') {
+          userProfile = innerData.user_profile;
+        }
+      }
+      
+      // Check for { user_profile: {...} }
+      if (!userProfile && dataObj.user_profile && typeof dataObj.user_profile === 'object') {
+        userProfile = dataObj.user_profile;
+      }
+      
+      // Check for { data: { success: true, user_profile: {...} } }
+      if (!userProfile && dataObj.data && typeof dataObj.data === 'object') {
+        const innerData = dataObj.data as Record<string, unknown>;
+        if (innerData.success && innerData.user_profile && typeof innerData.user_profile === 'object') {
+          userProfile = innerData.user_profile;
+        }
       }
     }
     
@@ -66,19 +82,21 @@ export async function loadProfileByUsername(
       return null;
     }
     
+    // Ensure required fields exist
     const profile = {
-      ...userProfile,
-      picture: userProfile.picture || '',
-      fullname: userProfile.fullname || userProfile.username || username,
-      followers: userProfile.followers || 0,
-      engagement_rate: userProfile.engagement_rate || 0,
-      is_verified: userProfile.is_verified || false,
+      ...userProfile as Record<string, unknown>,
+      picture: (userProfile as Record<string, unknown>)?.picture || '',
+      fullname: (userProfile as Record<string, unknown>)?.fullname || 
+                (userProfile as Record<string, unknown>)?.username || username,
+      followers: (userProfile as Record<string, unknown>)?.followers || 0,
+      engagement_rate: (userProfile as Record<string, unknown>)?.engagement_rate || 0,
+      is_verified: (userProfile as Record<string, unknown>)?.is_verified || false,
     };
     
     return {
       data: {
         success: true,
-        user_profile: profile,
+        user_profile: profile as any,
       },
     } as ProfileDetailResponse;
     
@@ -93,4 +111,8 @@ export function getProfilePaths(): string[] {
     const filename = path.split('/').pop() || '';
     return filename.replace('.json', '');
   });
+}
+
+export function getAvailableProfiles(): string[] {
+  return getProfilePaths();
 }
