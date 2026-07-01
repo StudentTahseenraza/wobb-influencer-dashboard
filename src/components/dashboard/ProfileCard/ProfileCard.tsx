@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import type { Platform, UserProfileSummary } from '@/types';
 import { Avatar } from '@/components/common/Avatar/Avatar';
+import { Badge } from '@/components/common/Badge/Badge';
 import { AddToListButton } from '@/components/AddToListButton';
 import { formatFollowers } from '@/utils/formatters';
 import { toast } from 'sonner';
@@ -22,16 +23,22 @@ export const ProfileCard = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (!profile.username) return;
     navigate(`/profile/${profile.username}?platform=${platform}`);
   };
 
   const handleCopyUsername = (e: React.MouseEvent) => {
     e.stopPropagation();
-    navigator.clipboard.writeText(profile.username);
-    toast.success('Username copied!');
+    if (profile.username) {
+      navigator.clipboard.writeText(profile.username);
+      toast.success('Username copied!');
+    }
   };
 
+  // Get avatar source with fallback
   const avatarSrc = profile.picture || '';
+  const displayName = profile.fullname || profile.username || 'Unknown';
+  const displayUsername = profile.username || 'unknown';
 
   return (
     <motion.div
@@ -40,37 +47,37 @@ export const ProfileCard = ({
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -4 }}
       onClick={handleClick}
-      className="profile-card"
+      className="profile-card cursor-pointer"
     >
       <div className="flex items-center gap-4">
         <Avatar 
           src={avatarSrc} 
-          alt={profile.fullname || profile.username}
+          alt={displayName}
           size="md"
-          fallback={profile.username?.substring(0, 2).toUpperCase()}
+          fallback={displayUsername.substring(0, 2).toUpperCase()}
         />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="font-semibold text-[var(--text-primary)] truncate">
-              @{profile.username}
+              @{displayUsername}
             </span>
             {profile.is_verified && (
-              <span className="badge badge-verified">✓ Verified</span>
+              <Badge variant="verified" size="sm">Verified</Badge>
             )}
-            <span className="badge badge-platform">{platform}</span>
+            <Badge variant="primary" size="sm">{platform}</Badge>
           </div>
           <p className="text-sm text-[var(--text-secondary)] truncate">
-            {profile.fullname || profile.username}
+            {displayName}
           </p>
           <div className="flex items-center gap-3 mt-1 flex-wrap">
             <span className="text-sm font-medium text-[var(--text-primary)]">
               {formatFollowers(profile.followers || 0)} followers
             </span>
             {profile.engagement_rate !== undefined && profile.engagement_rate > 0 && (
-              <span className="badge badge-engagement">
+              <Badge variant="success" size="sm">
                 {(profile.engagement_rate * 100).toFixed(1)}% engagement
-              </span>
+              </Badge>
             )}
           </div>
         </div>

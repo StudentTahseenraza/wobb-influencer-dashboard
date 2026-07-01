@@ -20,9 +20,9 @@ export function extractProfiles(platform: Platform): UserProfileSummary[] {
     console.warn(`No data found for platform: ${platform}`);
     return [];
   }
+  
   return data.accounts.map((item) => {
     const profile = item.account.user_profile;
-    // Ensure we have required fields
     return {
       ...profile,
       picture: profile.picture || '',
@@ -30,6 +30,7 @@ export function extractProfiles(platform: Platform): UserProfileSummary[] {
       followers: profile.followers || 0,
       engagement_rate: profile.engagement_rate || 0,
       is_verified: profile.is_verified || false,
+      username: profile.username || 'unknown',
     };
   });
 }

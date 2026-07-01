@@ -29,15 +29,18 @@ export const Avatar = ({
   // Generate fallback text from alt
   const getFallbackText = () => {
     if (fallback) return fallback;
-    const words = alt.split(' ');
+    if (!alt) return '?';
+    const words = String(alt).split(' ');
     if (words.length >= 2) {
-      return words[0][0] + words[1][0];
+      const first = words[0]?.[0] || '';
+      const second = words[1]?.[0] || '';
+      return (first + second).toUpperCase();
     }
     return alt.substring(0, 2).toUpperCase();
   };
 
   // If image fails to load or no src, show fallback
-  if (error || !src || src === '') {
+  if (error || !src || src === '' || src === 'undefined') {
     return (
       <div 
         className={clsx(
@@ -65,6 +68,7 @@ export const Avatar = ({
       )}
       onError={() => setError(true)}
       loading="lazy"
+      referrerPolicy="no-referrer"
     />
   );
 };
